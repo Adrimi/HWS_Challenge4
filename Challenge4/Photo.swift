@@ -20,4 +20,9 @@ class Photo: Codable {
         self.date = date
     }
     
+    func formattedDate() -> String {
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return format.string(from: self.date)
+    }
 }

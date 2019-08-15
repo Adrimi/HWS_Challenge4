@@ -50,6 +50,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="2Xg-vu-WLg"/>
+                    <connections>
+                        <segue destination="5vh-id-FPE" kind="show" id="euX-uN-euU"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OIG-eL-956" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -58,17 +61,31 @@
         <!--Detail View Controller-->
         <scene sceneID="ReZ-gU-7yi">
             <objects>
-                <viewController id="5vh-id-FPE" customClass="DetailViewController" customModule="Challenge4" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DetailView" id="5vh-id-FPE" customClass="DetailViewController" customModule="Challenge4" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Jf-o6-S7U">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FUr-rb-gWS">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="FUr-rb-gWS" firstAttribute="top" secondItem="3Jf-o6-S7U" secondAttribute="top" id="BD6-os-8Wl"/>
+                            <constraint firstAttribute="trailing" secondItem="FUr-rb-gWS" secondAttribute="trailing" id="X9q-Wi-vj2"/>
+                            <constraint firstItem="FUr-rb-gWS" firstAttribute="leading" secondItem="3Jf-o6-S7U" secondAttribute="leading" id="idE-Iz-OWG"/>
+                            <constraint firstItem="FUr-rb-gWS" firstAttribute="bottom" secondItem="JmV-YE-Llx" secondAttribute="bottom" id="x7b-Pj-su5"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="JmV-YE-Llx"/>
                     </view>
+                    <connections>
+                        <outlet property="imageView" destination="FUr-rb-gWS" id="9Ow-BO-wEE"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LfP-s9-SfC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2164" y="74"/>
+            <point key="canvasLocation" x="2164" y="73.313343328335833"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="YtZ-Q0-M1D">
