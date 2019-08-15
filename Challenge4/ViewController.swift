@@ -144,7 +144,8 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         ac.addTextField()
         
         ac.addAction(UIAlertAction(title: "Ok", style: .default) { [weak self, weak ac] _ in
-            guard let newName = ac?.textFields?[0].text else { return }
+            guard var newName = ac?.textFields?[0].text else { return }
+            if newName == "" { newName = "Unknown" }
             photo.name = newName
             self?.save()
             self?.tableView.reloadData()
