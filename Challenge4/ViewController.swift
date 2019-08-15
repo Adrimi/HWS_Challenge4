@@ -8,19 +8,21 @@
 
 import UIKit
 
-class ViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
 
     var photos = [Photo]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Main View Data
         title = "Photo Gallery"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.isNavigationBarHidden = false
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(takePhoto))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(takePhoto))
         
+        // Load in the background
         performSelector(inBackground: #selector(load), with: nil)
         
     }
@@ -91,17 +93,34 @@ class ViewController: UITableViewController, UIImagePickerControllerDelegate, UI
         // getters
         let photo = photos[indexPath.row]
         let path = getDocumentDirectory().appendingPathComponent(photo.image)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
         
         // setters
         cell.textLabel?.text = photo.name
-        // cell.detailTextLabel?.text = data zrobienia !!!
+        cell.detailTextLabel?.text = formatDate(of: photo.date)
         cell.imageView?.image = UIImage(contentsOfFile: path.path)
         cell.imageView?.layer.borderWidth = 2
         cell.imageView?.layer.cornerRadius = 3
+        cell.addGestureRecognizer(tap)
+        cell.addGestureRecognizer(longPress)
         
         return cell
     }
     
+    @objc func handleLongPress(_ press: UILongPressGestureRecognizer) {
+        print("long press")
+    }
+    
+    @objc func handleTap(_ press: UITapGestureRecognizer) {
+        print("tap")
+    }
+    
+    func formatDate(of date: Date) -> String {
+        let format = DateFormatter()
+        format.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return format.string(from: date)
+    }
 
     func getDocumentDirectory() -> URL {
         // default.urls asks for /documents directory, relative to the user's home directory.
