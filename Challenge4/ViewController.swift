@@ -8,29 +8,77 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
+class ViewController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     var photos = [Photo]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Photo Gallery"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.isNavigationBarHidden = false
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(takePhoto))
         
-        load()
+        performSelector(inBackground: #selector(load), with: nil)
         
     }
     
     @objc func takePhoto() {
+        // instantiate picker
+        let picker = UIImagePickerController()
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.sourceType = .camera
+        } else {
+            picker.sourceType = .photoLibrary
+        }
         
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
     }
     
-    func load() {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        // extract image from dictionary
+        guard let image = info[.editedImage] as? UIImage else { return }
+        let imageName = UUID().uuidString
+        let imagePath = getDocumentDirectory().appendingPathComponent(imageName)
+        
+        if let jpegData = image.jpegData(compressionQuality: 1.0) {
+            try? jpegData.write(to: imagePath)
+        }
+        
+        let photo = Photo(name: "Unknown", image: imageName, date: Date())
+        photos.append(photo)
+        save()
+        
+        tableView.reloadData()
+        dismiss(animated: true)
+    }
+    
+    @objc func load() {
         let defaults = UserDefaults.standard
+        if let savedPhotos = defaults.object(forKey: "photos") as? Data {
+            let jsonDecoder = JSONDecoder()
+            do {
+                photos = try jsonDecoder.decode([Photo].self, from: savedPhotos)
+            } catch {
+                print("Failed to load photos")
+            }
+        }
+        
+        tableView.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: false)
     }
     
     func save() {
-        
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(photos) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "photos")
+        } else {
+            print("Failed to save photos")
+        }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

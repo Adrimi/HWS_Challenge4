@@ -12,12 +12,12 @@ class Photo: Codable {
 
     var name: String
     var image: String
-    var count: Int
+    var date: Date
     
-    init(name: String, image: String, count: Int) {
+    init(name: String, image: String, date: Date) {
         self.name = name
         self.image = image
-        self.count = count
+        self.date = date
     }
     
 }
